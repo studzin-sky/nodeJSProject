@@ -1,28 +1,18 @@
-import dotnev from "dotenv";
-import express from "express";
-import path from "path";
+const myModule: object = require('./my-module');
+import { readFile } from 'fs';
+const express = require('express');
 
-dotnev.config();
-
-const port = process.env.SERVER_PORT;
+console.log(myModule);
 const app = express();
 
+app.get('/', (request: any, response: any) => {
+    readFile('./home.html', 'utf8', (err: any, html: any) => {
+        if (err) {
+            response.status(500).send('something went wrong on the server');
+        }
 
+        response.send(html);
+    })
+});
 
-// Configure Express to use EJS
-app.set( "views", path.join( __dirname, "views" ) );
-app.set( "view engine", "ejs" );
-
-// define a route handler for the default home page
-app.get( "/", ( req, res ) => {
-    // render the index template
-    res.render( "index" );
-} );
-
-// start the express server
-app.listen( port, () => {
-    // tslint:disable-next-line:no-console
-    console.log( `server started at http://localhost:${ port }` );
-} );
-
-// localhost:8080
+app.listen(process.env.PORT || 3000, () => console.log('App available on localhost:3000'));

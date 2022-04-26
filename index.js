@@ -1,23 +1,16 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const path_1 = __importDefault(require("path"));
-const app = (0, express_1.default)();
-const port = 8080; // default port to listen
-// Configure Express to use EJS
-app.set("views", path_1.default.join(__dirname, "views"));
-app.set("view engine", "ejs");
-// define a route handler for the default home page
-app.get("/", (req, res) => {
-    // render the index template
-    res.render("index");
+exports.__esModule = true;
+var myModule = require('./my-module');
+var fs_1 = require("fs");
+var express = require('express');
+console.log(myModule);
+var app = express();
+app.get('/', function (request, response) {
+    (0, fs_1.readFile)('./home.html', 'utf8', function (err, html) {
+        if (err) {
+            response.status(500).send('something went wrong on the server');
+        }
+        response.send(html);
+    });
 });
-// start the express server
-app.listen(port, () => {
-    // tslint:disable-next-line:no-console
-    console.log(`server started at http://localhost:${port}`);
-});
-// localhost:8080
+app.listen(process.env.PORT || 3000, function () { return console.log('App available on localhost:3000'); });
